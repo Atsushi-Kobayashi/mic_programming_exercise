@@ -2,7 +2,6 @@
 #include<iostream>
 #include<vector>
 #include<cmath>
-//未完！！　グレーの扱い方！！
 
 std::vector<int> horizontalSobelKernel() {
 	std::vector<int> kernel = {
@@ -94,11 +93,10 @@ void sobelFilter(cv::Mat &img) {
 
 int main()
 {
-	cv::Mat image = cv::imread("..\\..\\images\\color\\Lenna.bmp");
+	cv::Mat image = cv::imread("..\\images\\color\\Lenna.bmp");
 	sobelFilter(image);
 	cv::imshow("", image);
 	cv::waitKey(0);
-
 
 	return 0;
 }

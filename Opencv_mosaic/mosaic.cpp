@@ -60,7 +60,7 @@ void mosaicFilter(cv::Mat &img) {
 int main()
 {
 
-	cv::Mat image = cv::imread("..\\..\\images\\color\\Lenna.bmp");
+	cv::Mat image = cv::imread("..\\images\\color\\Lenna.bmp");
 	mosaicFilter(image);
 	cv::imshow("", image);
 	cv::waitKey(0);

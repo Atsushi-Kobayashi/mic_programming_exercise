@@ -67,7 +67,7 @@ void medianFilter(cv::Mat &img) {
 int main()
 {
 
-	cv::Mat image = cv::imread("..\\..\\images\\color\\Lenna.bmp");
+	cv::Mat image = cv::imread("..\\images\\color\\Lenna.bmp");
 	medianFilter(image);
 	cv::imshow("", image);
 	cv::waitKey(0);
