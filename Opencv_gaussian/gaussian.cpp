@@ -10,7 +10,7 @@ uchar convertToUchar(double value) {
 	else if (value > 255) {
 		return 255;
 	}
-	//ƒ}ƒCƒiƒX’l‚¨‚æ‚ÑƒI[ƒo[ƒtƒ[‚Ì‘Îô
+	//ãƒã‚¤ãƒŠã‚¹å€¤ãŠã‚ˆã³ã‚ªãƒ¼ãƒãƒ¼ãƒ•ãƒ­ãƒ¼ã®å¯¾ç­–
 	return (uchar)value;
 }
 
@@ -32,7 +32,7 @@ std::vector<double> gaussianKernel(int kernel_size,double var) {
 			kernel[i + kernel_size * j] = kernel[i + kernel_size * j] / kernel_value_sum;
 		}
 	}
-	//³‹K‰»
+	//æ­£è¦åŒ–
 
 	return kernel;
 }
@@ -49,17 +49,17 @@ void linearFilter(cv::Mat &img, std::vector<double> kernel, int kernel_size) {
 			row_ptr[i + kernel_h] = cv::Vec3b(img.at<cv::Vec3b>(j, i)[0], img.at<cv::Vec3b>(j, i)[1], img.at<cv::Vec3b>(j, i)[2]);
 		}
 	}
-	//zero padding (Mat‚Ì—v‘f‚Éƒ|ƒCƒ“ƒ^‚ÅƒAƒNƒZƒX‚·‚é•û–@)
+	//zero padding (Matã®è¦ç´ ã«ãƒã‚¤ãƒ³ã‚¿ã§ã‚¢ã‚¯ã‚»ã‚¹ã™ã‚‹æ–¹æ³•)
 
 	for (int j = 0; j < img_rows; ++j) {
 		cv::Vec3b *img_row_ptr = img.ptr<cv::Vec3b>(j);
-		//imgi‰ÁH‚·‚é‰æ‘œj‚ÌMat‚Ìjs–Ú‚Ìƒ|ƒCƒ“ƒ^æ“¾
+		//imgï¼ˆåŠ å·¥ã™ã‚‹ç”»åƒï¼‰ã®Matã®jè¡Œç›®ã®ãƒã‚¤ãƒ³ã‚¿å–å¾—
 
 		for (int i = 0; i < img_cols; ++i) {
 			double B = 0, G = 0, R = 0;
 			for (int l = 0; l< kernel_size; ++l) {
 				cv::Vec3b *pdd_row_ptr = img_zero_pdd.ptr<cv::Vec3b>(j + l);
-				//pddiƒ[ƒƒpƒfƒBƒ“ƒOÏ‚İ‰æ‘œC‘‚«Š·‚¦‚È‚¢j‚ÌMat‚Ìjs–Ú‚Ìƒ|ƒCƒ“ƒ^æ“¾
+				//pddï¼ˆã‚¼ãƒ­ãƒ‘ãƒ‡ã‚£ãƒ³ã‚°æ¸ˆã¿ç”»åƒï¼Œæ›¸ãæ›ãˆãªã„ï¼‰ã®Matã®jè¡Œç›®ã®ãƒã‚¤ãƒ³ã‚¿å–å¾—
 				for (int k = 0; k < kernel_size; ++k) {
 
 					B += (double)pdd_row_ptr[i+k][0] * kernel[k + kernel_size * l];
@@ -77,6 +77,9 @@ void linearFilter(cv::Mat &img, std::vector<double> kernel, int kernel_size) {
 
 }
 
+
+// Comment by Kayukawa
+// ã“ã“voidå‹ã®é–¢æ•°ã˜ã‚ƒãªãã¦ã€intã¨ã‹boolå‹ã«ã—ã¦ã€ErrorãŒã‚ã£ãŸæ™‚ã«Errorã®å€¤ã‚’è¿”ã™é–¢æ•°ã‚’è¨­è¨ˆã™ã‚‹ã®ã‚‚ä¾¿åˆ©ã§ã™ã€‚
 void gaussianFilter(cv::Mat &img) {
 	int kernel_size;
 	std::cout << "Input kernel size(odd): \n";
@@ -88,7 +91,7 @@ void gaussianFilter(cv::Mat &img) {
 	double var = 1;
 	std::cout << "Input variance: " << "\n";
 	std::cin >> var;
-	if (var<0) {
+	if (var<=0) {  // åˆ†æ•£0ã‚‚ãƒ€ãƒ¡ãªã®ã§ä¿®æ­£
 		std::cout << "Variance error.\n";
 		return;
 	}
