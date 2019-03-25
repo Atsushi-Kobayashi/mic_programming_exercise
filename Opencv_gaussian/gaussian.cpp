@@ -2,6 +2,7 @@
 #include<iostream>
 #include<vector>
 #include<cmath>
+#define gaussian_error (-1)
 
 uchar convertToUchar(double value) {
 	if (value < 0) {
@@ -77,32 +78,41 @@ void linearFilter(cv::Mat &img, std::vector<double> kernel, int kernel_size) {
 
 }
 
-void gaussianFilter(cv::Mat &img) {
+int gaussianFilter(cv::Mat &img) {
 	int kernel_size;
 	std::cout << "Input kernel size(odd): \n";
 	std::cin >> kernel_size;
 	if (kernel_size%2==0||kernel_size<=0) {
 		std::cout << "Size error.\n";
-		return;
+		return gaussian_error;
 	}
 	double var = 1;
 	std::cout << "Input variance: " << "\n";
 	std::cin >> var;
 	if (var<0) {
 		std::cout << "Variance error.\n";
-		return;
+		return gaussian_error;
 	}
 
 	std::vector<double> kernel = gaussianKernel(kernel_size,var);
 	linearFilter(img, kernel, kernel_size);
+	return 1;
 }
 
 int main()
 {
-
+	int error_check=0;
 	cv::Mat image = cv::imread("..\\images\\color\\Lenna.bmp");
-	gaussianFilter(image);
-	cv::imshow("", image);
-	cv::waitKey(0);
+	error_check =gaussianFilter(image);
+	if (error_check == 1) {
+		std::cout << "Gaussian filter processing completed.\n";
+		cv::imshow("", image);
+		cv::waitKey(0);
+	}
+	else if(error_check == -1){
+		std::cout << "Gaussian filter processing failed.\n";
+	}
 
+	system("pause");
+	return 0;
 }
