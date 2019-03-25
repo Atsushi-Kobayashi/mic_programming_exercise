@@ -1,7 +1,7 @@
 #include <opencv2/opencv.hpp>
 #include<iostream>
 #include<vector>
-
+#define smooth_error (-1)
 
 uchar convertToUchar(double value) {
 	if (value < 0) {
@@ -61,24 +61,34 @@ void linearFilter(cv::Mat &img, std::vector<double> kernel, int kernel_size) {
 
 }
 
-void smoothFilter(cv::Mat &img) {
+int smoothFilter(cv::Mat &img) {
 	int kernel_size;
 	std::cout << "Input kernel size: \n";
 	std::cin >> kernel_size;
 	if (kernel_size <= 1 || kernel_size % 2 == 0) {
-		return;
+		return smooth_error;
 	}
 	std::vector<double> kernel = smoothKernel(kernel_size);
 	linearFilter(img, kernel, kernel_size);
+	return 1;
 }
 
 int main()
 {
+	int error_check = 0;
 	cv::Mat image = cv::imread("..\\images\\color\\Lenna.bmp");
-	smoothFilter(image);
-	cv::imshow("", image);
-	cv::waitKey(0);
+	error_check =smoothFilter(image);
+	if (error_check == 1) {
+		std::cout << "Smooth filter processing completed.\n";
+		cv::imshow("", image);
+		cv::waitKey(0);
+	}
+		if (error_check == -1) {
+			std::cout << "Smooth filter processing failed.\n";
+	}
 
 
+
+	system("pause");
 	return 0;
 }

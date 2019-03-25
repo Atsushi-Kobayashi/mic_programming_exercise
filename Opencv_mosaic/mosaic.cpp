@@ -1,22 +1,23 @@
 #include <opencv2/opencv.hpp>
 #include<iostream>
+#define mosaic_error (-1)
 
 uchar convertToUchar(int value) {
 	if (value < 0) {
 		return 0;
 	}
-	else if(value > 255){
+	else if (value > 255) {
 		return 255;
 	}
 	return (uchar)value;
 }
 
-void mosaicFilter(cv::Mat &img) {
+int mosaicFilter(cv::Mat &img) {
 	int mosaic_size;
 	std::cout << "Input mosaic size: \n";
 	std::cin >> mosaic_size;
 	if (mosaic_size <= 1) {
-		return;
+		return mosaic_error;
 	}
 
 	int img_rows = img.rows;
@@ -55,16 +56,23 @@ void mosaicFilter(cv::Mat &img) {
 			}
 		}
 	}
+	return 1;
 }
 
 int main()
 {
-
+	int error_check = 0;
 	cv::Mat image = cv::imread("..\\images\\color\\Lenna.bmp");
-	mosaicFilter(image);
-	cv::imshow("", image);
-	cv::waitKey(0);
+	error_check = mosaicFilter(image);
+	if (error_check == 1) {
+		std::cout << "Mosaic filter processing completed.\n";
+		cv::imshow("", image);
+		cv::waitKey(0);
+	}
+	if (error_check == -1) {
+		std::cout << "Mosaic filter processing failed.\n";
+	}
 
-
+	system("pause");
 	return 0;
 }

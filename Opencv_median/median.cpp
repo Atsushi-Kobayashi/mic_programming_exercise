@@ -1,5 +1,6 @@
 #include <opencv2/opencv.hpp>
 #include<iostream>
+#define median_error (-1)
 
 void insertionSort(std::vector<uchar> &vct, int size) {
 	int i, j;
@@ -20,12 +21,12 @@ void insertionSort(std::vector<uchar> &vct, int size) {
 }
 
 
-void medianFilter(cv::Mat &img) {
+int medianFilter(cv::Mat &img) {
 	int window_size;
 	std::cout << "Input window size: \n";
 	std::cin >> window_size;
 	if (window_size <= 1) {
-		return;
+		return median_error;
 	}
 
 	int img_rows = img.rows;
@@ -62,16 +63,23 @@ void medianFilter(cv::Mat &img) {
 			img.at<cv::Vec3b>(j, i)[2] = R[(window_size*window_size) / 2];
 		}
 	}
+	return 1;
 }
 
 int main()
 {
-
+	int error_check = 0;
 	cv::Mat image = cv::imread("..\\images\\color\\Lenna.bmp");
-	medianFilter(image);
-	cv::imshow("", image);
-	cv::waitKey(0);
+	error_check = medianFilter(image);
+	if (error_check == 1) {
+		std::cout << "Median filter processing completed.\n";
+		cv::imshow("", image);
+		cv::waitKey(0);
+	}
+	if (error_check == -1) {
+		std::cout << "Median filter processing failed.\n";
+	}
 
-
+	system("pause");
 	return 0;
 }

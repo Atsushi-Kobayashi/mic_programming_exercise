@@ -317,5 +317,6 @@ int main()
 	cv::imshow("converted", image);
 	cv::waitKey(0);
 
+	system("pause");
 	return 0;
 }
