@@ -89,7 +89,7 @@ int gaussianFilter(cv::Mat &img) {
 	double var = 1;
 	std::cout << "Input variance: " << "\n";
 	std::cin >> var;
-	if (var<0) {
+	if (var<=0) {
 		std::cout << "Variance error.\n";
 		return gaussian_error;
 	}
