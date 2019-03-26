@@ -17,6 +17,8 @@ cv::Vec3b convertToUchar(std::vector<double> vec) {
 	return cv::Vec3b {convertToUchar(vec[0]),convertToUchar(vec[1]),convertToUchar(vec[2])};
 }
 
+
+//memo: pixel‚²‚Æ‚ÉŠÖ”‚É“ü‚ê‚Äˆ—‚·‚×‚«‚©CMat‘S‘Ì‚ğ“ü‚ê‚Äˆ—‚³‚¹‚é‚×‚«‚©H
 std::vector<double> HSVConvertedFromBGR(double B,double G,double R) {
 	double hue, saturation, value;
 	double max = 0, min = 0;
