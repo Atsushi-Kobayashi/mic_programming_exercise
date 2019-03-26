@@ -102,7 +102,7 @@ int gaussianFilter(cv::Mat &img) {
 int main()
 {
 	int error_check=0;
-	cv::Mat image = cv::imread("..\\images\\color\\Lenna.bmp");
+	cv::Mat image = cv::imread("..\\..\\images\\color\\Lenna.bmp");
 	error_check =gaussianFilter(image);
 	if (error_check == 1) {
 		std::cout << "Gaussian filter processing completed.\n";

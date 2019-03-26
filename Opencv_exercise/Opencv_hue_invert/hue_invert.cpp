@@ -158,9 +158,12 @@ void hueInvert(cv::Mat &img) {
 }
 
 
-int main()
+int main(int argc,char *argv[])
 {
-	cv::Mat image = cv::imread("..\\images\\color\\Lenna.bmp");
+	//cv::Mat image = cv::imread("..\\..\\images\\color\\Lenna.bmp");
+
+	//コマンドライン変数で画像ファイル名を指定
+	cv::Mat image = cv::imread(argv[1]);
 	cv::imshow("original", image);
 	cv::waitKey(0);
 

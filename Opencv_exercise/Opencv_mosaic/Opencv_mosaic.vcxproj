@@ -20,8 +20,8 @@
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>15.0</VCProjectVersion>
-    <ProjectGuid>{71b744e9-640e-4839-8cf3-cfcf0ae53d5b}</ProjectGuid>
-    <RootNamespace>Opencv_median</RootNamespace>
+    <ProjectGuid>{6cecea07-d03b-48f6-bf55-df9c7e4dedba}</ProjectGuid>
+    <RootNamespace>Opencv_mosaic</RootNamespace>
     <WindowsTargetPlatformVersion>10.0.17763.0</WindowsTargetPlatformVersion>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
@@ -70,8 +70,8 @@
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
-    <IncludePath>C:\Users\Atsushi\dev\opencv\build\include;$(IncludePath)</IncludePath>
-    <LibraryPath>C:\Users\Atsushi\dev\opencv\build\x64\vc15\lib;$(LibraryPath)</LibraryPath>
+    <IncludePath>..\..\..\..\..\dev\opencv\build\include;$(IncludePath)</IncludePath>
+    <LibraryPath>..\..\..\..\..\dev\opencv\build\x64\vc15\lib;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <IncludePath>C:\Users\Atsushi\dev\opencv\build\include;$(IncludePath)</IncludePath>
@@ -126,7 +126,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="median.cpp" />
+    <ClCompile Include="mosaic.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

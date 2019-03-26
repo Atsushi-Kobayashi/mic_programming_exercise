@@ -138,10 +138,10 @@ void sobelFilter(cv::Mat &img) {
 	cv::waitKey(0);
 }
 
-int main()
+int main(int argc,char *argv[])
 {
-	cv::Mat image = cv::imread("..\\images\\color\\Lenna.bmp");
-
+	//cv::Mat image = cv::imread("..\\..\\images\\color\\Lenna.bmp");
+	cv::Mat image = cv::imread(argv[1]);
 	cv::Mat gray = GrayConvertedFromBGR(image);
 	cv::imshow("", gray);
 	cv::waitKey(0);

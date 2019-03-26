@@ -20,8 +20,8 @@
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>15.0</VCProjectVersion>
-    <ProjectGuid>{c7b0a905-5b01-43e0-893a-b4225f6e96ed}</ProjectGuid>
-    <RootNamespace>Opencv_smooth</RootNamespace>
+    <ProjectGuid>{e2f31864-ad20-41f7-9cee-3ef721d9c165}</ProjectGuid>
+    <RootNamespace>Opencv_exercise</RootNamespace>
     <WindowsTargetPlatformVersion>10.0.17763.0</WindowsTargetPlatformVersion>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
@@ -70,8 +70,8 @@
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
-    <IncludePath>C:\Users\Atsushi\dev\opencv\build\include;$(IncludePath)</IncludePath>
-    <LibraryPath>C:\Users\Atsushi\dev\opencv\build\x64\vc15\lib;$(LibraryPath)</LibraryPath>
+    <IncludePath>..\..\..\..\..\dev\opencv\build\include;$(IncludePath)</IncludePath>
+    <LibraryPath>..\..\..\..\..\\dev\opencv\build\x64\vc15\lib;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <IncludePath>C:\Users\Atsushi\dev\opencv\build\include;$(IncludePath)</IncludePath>
@@ -126,7 +126,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="smooth.cpp" />
+    <ClCompile Include="main.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
