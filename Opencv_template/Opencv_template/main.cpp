@@ -8,5 +8,4 @@ int main()
 	cv::waitKey(0);
 	system("pause");
 	return 0;
-
 }
