@@ -142,14 +142,14 @@ int main(int argc,char *argv[])
 {
 	//cv::Mat image = cv::imread("..\\..\\images\\color\\Lenna.bmp");
 	cv::Mat image = cv::imread(argv[1]);
+	cv::imshow("original", image);
+	cv::waitKey(0);
 	cv::Mat gray = GrayConvertedFromBGR(image);
-	cv::imshow("", gray);
+	cv::imshow("gray", gray);
 	cv::waitKey(0);
 
 	sobelFilter(image);
 	//cv::imshow("", image);
 
-
-	system("pause");
 	return 0;
 }
