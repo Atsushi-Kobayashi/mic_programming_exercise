@@ -73,20 +73,19 @@ int smoothFilter(cv::Mat &img) {
 	return 1;
 }
 
-int main()
+int main(int argc, char *argv[])
 {
 	int error_check = 0;
-	cv::Mat image = cv::imread("..\\images\\color\\Lenna.bmp");
-	error_check =smoothFilter(image);
+	cv::Mat image = cv::imread(argv[1]);
+	error_check = smoothFilter(image);
 	if (error_check == 1) {
 		std::cout << "Smooth filter processing completed.\n";
 		cv::imshow("", image);
 		cv::waitKey(0);
 	}
-		if (error_check == -1) {
-			std::cout << "Smooth filter processing failed.\n";
+	if (error_check == -1) {
+		std::cout << "Smooth filter processing failed.\n";
 	}
-
 
 
 	system("pause");
