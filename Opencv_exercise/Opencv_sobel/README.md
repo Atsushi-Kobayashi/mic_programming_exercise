@@ -1,1 +1,1 @@
-Sobel (now editing)
+# Sobel filter
