@@ -53,6 +53,18 @@ cv::Mat GrayConvertedFromBGR(cv::Mat &BGR_img) {
 	return gray_img;
 }
 
+//img_tmpに格納された値をスケーリングしてgray_imgに代入する関数
+void substituteScaledValue(cv::Mat &gray_img, std::vector<double> img_tmp, double max, double min) {
+
+	int img_rows = gray_img.rows;
+	int img_cols = gray_img.cols;
+	for (int j = 0; j < img_rows; ++j) {
+		uchar *img_row_ptr = gray_img.ptr<uchar>(j);
+		for (int i = 0; i < img_cols; ++i) {
+			img_row_ptr[i] = convertToUchar(255 * (img_tmp[i + j * img_cols] - min) / (max - min));
+		}
+	}
+}
 
 void sobelConvolution(cv::Mat &gray_img, std::vector<double> kernel, int kernel_size) {
 	int img_rows = gray_img.rows;
@@ -60,7 +72,7 @@ void sobelConvolution(cv::Mat &gray_img, std::vector<double> kernel, int kernel_
 
 	int kernel_h = (kernel_size - 1) / 2;
 	double max = 0, min = 0;
-	std::vector<double> img_dst = {};
+	std::vector<double> img_tmp = {};
 
 	for (int j = 0; j < img_rows; ++j) {
 
@@ -94,56 +106,62 @@ void sobelConvolution(cv::Mat &gray_img, std::vector<double> kernel, int kernel_
 			}
 
 			//imgの画素(i,j)の計算結果がimg_dst[i+j*img_cols]に格納される
-			img_dst.emplace_back(conv_sum);
+			img_tmp.emplace_back(conv_sum);
 
 		}
 	}
 
-	//スケーリング
-	for (int j = 0; j < img_rows; ++j) {
-		uchar *img_row_ptr = gray_img.ptr<uchar>(j);
-		for (int i = 0; i < img_cols; ++i) {
-			img_row_ptr[i] = convertToUchar(255 * (img_dst[i + j * img_cols] - min) / (max - min));
-		}
-	}
-
+	//スケーリングしてgray_imgに代入
+	substituteScaledValue(gray_img, img_tmp, max, min);
 }
 
 
 void sobelFilter(cv::Mat &gray_img) {
 	int kernel_size = 3;
-
 	int img_cols = gray_img.cols;
 	int img_rows = gray_img.rows;
 
+	std::vector<double> img_fused_tmp = {};
+	double fused_sobel_max = 0, fused_sobel_min = 0;
 
 	std::vector<double> horizontal_kernel = horizontalSobelKernel();
 	std::vector<double> vertical_kernel = verticalSobelKernel();
 
-	//cv::Mat gray_img = GrayConvertedFromBGR(img);
 	cv::Mat gray_img_clone = gray_img.clone();
 
-	//水平方向のsobel処理をgray_imgに実行
+	//水平方向のsobel処理をgray_imgに実行し，結果を表示
 	sobelConvolution(gray_img, horizontal_kernel, kernel_size);
-
 	cv::imshow("horizontal sobel", gray_img);
 	cv::waitKey(0);
 
-	//鉛直方向のsobel処理をgray_img_cloneに実行
+	//鉛直方向のsobel処理をgray_img_cloneに実行し，結果を表示
 	sobelConvolution(gray_img_clone, vertical_kernel, kernel_size);
-
 	cv::imshow("vertical sobel", gray_img_clone);
 	cv::waitKey(0);
 
-	//水平・鉛直の処理結果の二乗和平方をとって合成
-	for (int i = 0; i < img_cols; ++i) {
-		for (int j = 0; j < img_rows; ++j) {
-			gray_img.at<uchar>(j, i) =
-				pow(gray_img.at<uchar>(j, i)*gray_img.at<uchar>(j, i)
-					+ gray_img_clone.at<uchar>(j, i) *gray_img_clone.at<uchar>(j, i), 0.5);
+	//水平・鉛直の処理結果の合成
+	for (int j = 0; j < img_rows; ++j) {
+		uchar *img_hrz_row_ptr = gray_img.ptr<uchar>(j);
+		uchar *img_vrt_row_ptr = gray_img_clone.ptr<uchar>(j);
+		for (int i = 0; i < img_cols; ++i) {
 
+			//水平・鉛直の処理結果の二乗和平方根をとり，img_fused_tmpに格納
+			img_fused_tmp.emplace_back(
+				(double)pow(img_hrz_row_ptr[i] * img_hrz_row_ptr[i]
+					+ img_vrt_row_ptr[i] * img_vrt_row_ptr[i], 0.5));
+
+			//スケーリングに必要な最大値，最小値を保存
+			if (img_fused_tmp[i + j * img_cols] >= fused_sobel_max) {
+				fused_sobel_max = img_fused_tmp[i + j * img_cols];
+			}
+			if (img_fused_tmp[i + j * img_cols] <= fused_sobel_min) {
+				fused_sobel_min = img_fused_tmp[i + j * img_cols];
+			}
 		}
 	}
+
+	//合成した値をスケーリングしてgray_imgに代入
+	substituteScaledValue(gray_img, img_fused_tmp, fused_sobel_max, fused_sobel_min);
 
 }
 
@@ -158,7 +176,7 @@ int main(int argc, char *argv[])
 	cv::waitKey(0);
 
 	sobelFilter(gray);
-	cv::imshow("sobel", gray);
+	cv::imshow("fused sobel", gray);
 	cv::waitKey(0);
 
 	return 0;
