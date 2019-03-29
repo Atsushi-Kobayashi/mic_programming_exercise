@@ -72,6 +72,7 @@ void sobelConvolution(cv::Mat &gray_img, std::vector<double> kernel, int kernel_
 
 	int kernel_h = (kernel_size - 1) / 2;
 	double max = 0, min = 0;
+	//vector はあらかじめサイズを指定してやるとメモリ領域のとり直ししなくて済み，より高速
 	std::vector<double> img_tmp = {};
 
 	for (int j = 0; j < img_rows; ++j) {

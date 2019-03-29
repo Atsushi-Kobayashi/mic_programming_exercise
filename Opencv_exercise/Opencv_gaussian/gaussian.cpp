@@ -111,7 +111,9 @@ int main(int argc,char *argv[])
 		cv::waitKey(0);
 	}
 	else if(error_check == -1){
-		std::cout << "Gaussian filter processing failed.\n";
+		//std::cout << "Gaussian filter processing failed.\n";
+		std::cerr << "Gaussian filter processing failed.\n";
+		return -1;
 	}
 
 	system("pause");

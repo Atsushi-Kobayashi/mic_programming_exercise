@@ -167,6 +167,43 @@ int main()
 	CvVec3bPointerTest(&img_row_ptr[100]);
 	for (int i = 0; i < 3; ++i) { std::cout << (int)img_row_ptr[100][i] << "\n"; }*/
 
+	cv::Mat img = cv::imread("..\\..\\images\\color\\Lenna.bmp");
+	cv::imshow("origin", img);
+	cv::waitKey(0);
+
+	int img_rows = img.rows;
+	int img_cols = img.cols;
+	int window_h = 10;
+
+	//ミラーリングでパディング
+	cv::Mat img_zero_pdd = cv::Mat::zeros(img_cols + (2 * window_h), img_rows + (2 * window_h), CV_8UC3);
+
+	for (int j = -window_h; j < img_rows + window_h; ++j) {
+		cv::Vec3b *pdd_row_ptr = img_zero_pdd.ptr<cv::Vec3b>(j + window_h);
+		int k = j;
+		if (j < 0) {
+			k = -j - 1;
+		}
+		else if (j >= img_rows) {
+			k = 2 * img_rows - 1 - j;
+		}
+		cv::Vec3b *img_row_ptr = img.ptr<cv::Vec3b>(k);
+		for (int i = -window_h; i < img_cols + window_h; ++i) {
+			int l = i;
+			if (i < 0) {
+				l = -i - 1;
+			}
+			else if (i >= img_cols) {
+				l = 2 * img_cols - 1 - i;
+			}
+
+			pdd_row_ptr[i + window_h] = cv::Vec3b(img_row_ptr[l][0], img_row_ptr[l][1], img_row_ptr[l][2]);
+		}
+	}
+
+	cv::imshow("millor", img_zero_pdd);
+	cv::waitKey(0);
+
 
 
 	system("pause");
