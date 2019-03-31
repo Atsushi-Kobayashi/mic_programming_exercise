@@ -12,9 +12,7 @@ public:
 	Node* m_next_node_ptr;
 	Node* m_prev_node_ptr;
 
-	//staticにしないと,
-	//"静的でないメンバー参照は特定のオブジェクトを基準とする相対参照である必要があります"
-	//ってでる。staticはclass固有で，オブジェクトを作らなくても参照できるものらしい
+	//インスタンスを作らなくても参照できるようstaticで関数定義
 	static void link_to_next_node(Node *node, Node *next_node);
 	
 };
