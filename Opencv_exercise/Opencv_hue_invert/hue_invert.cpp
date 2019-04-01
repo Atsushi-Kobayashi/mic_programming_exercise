@@ -21,53 +21,31 @@ cv::Vec3b convertToUchar(std::vector<double> vec) {
 //memo: pixelごとに関数に入れて処理すべきか，Mat全体を入れて処理させるべきか？
 std::vector<double> HSVConvertedFromBGR(double B, double G, double R) {
 	double hue, saturation, value;
-	double max = 0.0, min = 0.0;
+	double max = std::max({ B,G,R });
+	double min = std::min({ B,G,R });
 
-	if (B == G && G == R) {
+	if (max == min) {
 		hue = 0;
 		saturation = 0;
 		value = B;
 	}
 
-	else if (B >= G && B >= R) {
-		max = B;
-		if (G >= R) {
-			min = R;
-		}
-		else {
-			min = G;
-		}
+	else if (max == B) {
 		hue = 60.0 * ((R - G) / (max - min)) + 240.0;
 	}
-	else if (G >= R && G >= B) {
-		max = G;
-		if (R >= B) {
-			min = B;
-		}
-		else {
-			min = R;
-		}
+	else if (max == G) {
 		hue = 60.0 * ((B - R) / (max - min)) + 120.0;
 	}
-	else if (R >= B && R >= G) {
-		max = R;
-		if (B >= G) {
-			min = G;
-		}
-		else {
-			min = B;
-		}
+	else if (max == R) {
 		hue = 60 * ((G - B) / (max - min));
 	}
+
 	saturation = ((max - min) / max);
 	value = max / 255.0;
 
-	if (hue < 0) {
-		hue += 360;
-	}
-	else if (hue >= 360.0) {
-		hue -= 360;
-	}
+	//hue が0未満または 360以上の場合の処理
+	hue = std::fmod(hue + 360.0, 360.0);
+
 	return std::vector<double> {hue, saturation, value};
 }
 
@@ -78,12 +56,7 @@ std::vector<double> BGRConvertedFromHSV(double H, double S, double V) {
 	double f = 0.0, p = 0.0, q = 0.0, t = 0.0;
 
 	//H,S,Vの値をそれぞれ[0,360), [0,1], [0,1]の範囲内に収める
-	if (H >= 360.0) {
-		H -= 360.0;
-	}
-	else if (H < 0.0) {
-		H += 360.0;
-	}
+	H = std::fmod(H + 360.0, 360.0);
 	if (S > 1.0) {
 		S = 1.0;
 	}
@@ -163,13 +136,9 @@ void hueInvert(cv::Mat &img) {
 
 
 			//hueを反転
-			HSV[0] += 180.0;
-			if (HSV[0] >= 360.0) {
-				HSV[0] -= 360.0;
-			}
+			HSV[0] = std::fmod(HSV[0] + 180.0, 360.0);
 
 			//HSV[2] =1.0-HSV[2];
-
 
 
 			std::vector<double> BGR = { 0,0,0 };
@@ -190,11 +159,13 @@ int main(int argc, char *argv[])
 	cv::imshow("original", image);
 	cv::waitKey(0);
 
-	cv::Mat image_ground_truth = ~image;
+	//＊ground truth つくる＊
+
+	//cv::Mat image_ground_truth = ~image;
 	hueInvert(image);
 	cv::imshow("converted", image);
 	cv::waitKey(0);
-	cv::imshow("Ground truth", image_ground_truth);
+	//cv::imshow("Ground truth", image_ground_truth);
 	cv::waitKey(0);
 
 	system("pause");
