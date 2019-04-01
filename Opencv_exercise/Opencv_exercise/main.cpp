@@ -27,101 +27,172 @@ void CvVec3bPointerTest(cv::Vec3b *ptr) {
 }
 
 //hue invertの関数，修正前
-std::vector<double> BGRConvertedFromHSV(std::vector<double> HSV) {
-	double B = 0, G = 0, R = 0;
+std::vector<double> BGRConvertedFromHSV(double H, double S, double V) {
+	double B = 0.0, G = 0.0, R = 0.0;
 	int Hi = 0;
-	double f = 0, p = 0, q = 0, t = 0;
-	if (HSV[1] == 0) {
-		B = HSV[2];
-		G = HSV[2];
-		R = HSV[2];
+	double f = 0.0, p = 0.0, q = 0.0, t = 0.0;
+
+	if (H >= 360.0) {
+		H -= 360.0;
+	}
+	else if (H < 0.0) {
+		H += 360.0;
+	}
+
+	if (S == 0.0) {
+		B = V;
+		G = V;
+		R = V;
 	}
 	else {
 
 		//修正！！
 
-		Hi = (int)(HSV[0] / 60);
-		Hi = Hi % 6;
-		//std::cout << Hi << ":Hi\n";
-		f = (HSV[0] / 60) - Hi;
-		p = HSV[2] * (1 - HSV[1]/255);
-		q = HSV[2] * (1 - f * HSV[1]/255);
-		t = HSV[2] * (1 - (1 - f)*HSV[1]/255);
-		/*if (Hi == 0) {
-			G = p;
-			B = t;
-			R = HSV[2];
-		}
-		else if (Hi == 1) {
-			R = p;
-			G = HSV[2];
-			B = q;
-		}
-		else if (Hi == 2) {
-			R = t;
-			G = HSV[2];
-			B = p;
-		}
-		else if (Hi == 3) {
-			B = HSV[2];
-			R = q;
-			G = p;
-		}
-		else if (Hi == 4) {
-			B = HSV[2];
-			R = p;
-			G = t;
-		}
-		else if (Hi == 5) {
-			G = q;
-			B = p;
-			R = HSV[2];
-		}
-		else {
-			std::cout << "Hi Error!!: "<<Hi<<"\n";
-		}*/
-		//実験（BGR->HSV->BGRの復元）結果にもとづく
-
+		Hi = (int)(H / 60);
+		f = (double)(H / 60.0) - Hi;
+		p = V * (1 - S);
+		q = V * (1 - f * S);
+		t = V * (1 - (1 - f)*S);
+		
 		if (Hi == 0) {
 			B = p;
 			G = t;
-			R = HSV[2];
+			R = V;
 		}
 		else if (Hi == 1) {
 			B = p;
-			G = HSV[2];
+			G = V;
 			R = q;
 		}
 		else if (Hi == 2) {
 			B = t;
-			G = HSV[2];
+			G = V;
 			R = p;
 		}
 		else if (Hi == 3) {
-			B = HSV[2];
+			B = V;
 			G = q;
 			R = p;
 		}
 		else if (Hi == 4) {
-			B = HSV[2];
+			B = V;
 			G = p;
 			R = t;
 		}
 		else if (Hi == 5) {
 			B = q;
 			G = p;
-			R = HSV[2];
+			R = V;
 		}
 		else {
 			std::cout << "Hi Error!!: " << Hi << "\n";
 		}
-		//文献通り
-
 
 	}
-	std::vector<double> BGR = {B,G,R};
+	std::vector<double> BGR = {255.0*B,255.0*G,255.0*R};
 	return BGR;
 }
+
+std::vector<double> HSVConvertedFromBGR(double B, double G, double R) {
+	double hue = 0.0, saturation = 0.0, value = 0.0;
+	double max = 0.0, min = 0.0;
+	max = std::max({ B,G,R });
+	min = std::min({ B,G,R });
+	if (max == min) {
+		hue = 0;
+		saturation = 0;
+		value = B / 255.0;
+	}
+	else if (max == B) {
+
+		hue = 60.0* (R - G) / (max - min) + 240.0;
+	}
+	else if (max == G) {
+		hue = 60.0 *(B - R) / (max - min) + 120.0;
+	}
+	else if (max == R) {
+		hue = 60 * (G - B) / (max - min);
+	}
+	saturation = (max - min) / max;
+	value = max / 255.0;
+
+	if (hue < 0) {
+		hue += 360.0;
+	}
+	else if (hue > 359) {
+		hue -= 360.0;
+	}
+	return std::vector<double> {hue, saturation, value};
+}
+
+//wikiに従った　HSV->BGR
+//std::vector<double> BGRConvertedFromHSV(double H, double S, double V) {
+//	double B = 0.0, G = 0.0, R = 0.0;
+//	double Hd = 0.0;
+//	double C = 0.0, X = 0.0;
+//
+//	if (H >= 360.0) {
+//		H -= 360.0;
+//	}
+//	else if (H < 0.0) {
+//		H += 360.0;
+//	}
+//
+//	if (S == 0.0) {
+//		B = V;
+//		G = V;
+//		R = V;
+//	}
+//	else {
+//		Hd = H / 60.0;
+//		C = S * V;
+//
+//		int f = (int)Hd % 2 - 1;
+//		if (f >= 0) {
+//			X = C * (1 - f);
+//		}
+//		else {
+//			X = C * (1 + f);
+//		}
+//
+//		B = (V - C);
+//		G = (V - C);
+//		R = (V - C);
+//
+//		if (0 <= Hd && Hd < 1) {
+//			B += 0;
+//			G += X;
+//			R += C;
+//		}
+//		else if (1 <= Hd && Hd < 2) {
+//			B += 0;
+//			G += C;
+//			R += X;
+//		}
+//		else if (2 <= Hd && Hd < 3) {
+//			B += X;
+//			G += C;
+//			R += 0;
+//		}
+//		else if (3 <= Hd && Hd < 4) {
+//			B += C;
+//			G += X;
+//			R += 0;
+//		}
+//		else if (4 <= Hd && Hd < 5) {
+//			B += C;
+//			G += 0;
+//			R += X;
+//		}
+//		else if (5 <= Hd && Hd < 6) {
+//			B += X;
+//			G += 0;
+//			R += C;
+//		}
+//	}
+//	std::vector<double> BGR = { 255 * B,255 * G,255 * R };
+//	return BGR;
+//}
 
 int main()
 {
@@ -207,19 +278,37 @@ int main()
 	//cv::waitKey(0);
 
 
-	double Hd = 190 / 60.0;
-	double C = 0.8;
-	double X = 0;
+	//double Hd = 190 / 60.0;
+	//double C = 0.8;
+	//double X = 0;
 
-	int f = (int)Hd % 2 - 1;
-	if (f >= 0) {
-		X = C * (1 - f);
-	}
-	else {
-		X = C * (1 + f);
-	}
+	//int f = (int)Hd % 2 - 1;
+	//if (f >= 0) {
+	//	X = C * (1 - f);
+	//}
+	//else {
+	//	X = C * (1 + f);
+	//}
 
-	std::cout << X << "\n";
+	//std::cout << X << "\n";
+
+	//hue invert テスト用
+	/*double B,G,R;
+	std::cout << "B: ";
+	std::cin >> B;
+	std::cout << "\n";
+	std::cout << "G: ";
+	std::cin >> G;
+	std::cout << "\n";
+	std::cout << "R: ";
+	std::cin >> R;
+	std::cout << "\n";
+
+	std::vector<double> HSV = HSVConvertedFromBGR(B, G, R);
+	for (int i=0; i < HSV.size(); ++i) { std::cout << HSV[i] << "\n"; }
+
+	std::vector<double> re_BGR = BGRConvertedFromHSV(HSV[0],HSV[1],HSV[2]);
+	for (int i = 0; i < re_BGR.size(); ++i) { std::cout << re_BGR[i] << "\n"; }*/
 
 	system("pause");
 	return 0;
