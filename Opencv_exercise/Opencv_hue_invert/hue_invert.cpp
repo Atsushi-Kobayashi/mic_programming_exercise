@@ -159,13 +159,31 @@ int main(int argc, char *argv[])
 	cv::imshow("original", image);
 	cv::waitKey(0);
 
-	//＊ground truth つくる＊
 
-	//cv::Mat image_ground_truth = ~image;
+	//比較のための画像の生成、表示
+	cv::Mat hsv_img;
+	cv::cvtColor(image, hsv_img,cv::COLOR_BGR2HSV);
+	/*cv::imshow("HSV GT", hsv_img);
+	cv::waitKey(0);*/
+
+	int img_rows = hsv_img.rows;
+	int img_cols = hsv_img.cols;
+	for (int j = 0; j < img_rows; ++j) {
+		cv::Vec3b *img_row_ptr = hsv_img.ptr<cv::Vec3b>(j);
+		for (int i = 0; i < img_cols; ++i) {
+			img_row_ptr[i][0] = (uchar)std::fmod((int)img_row_ptr[i][0]+90,180);
+		}
+	}
+
+	cv::Mat img_GT;
+	cv::cvtColor(hsv_img,img_GT, cv::COLOR_HSV2BGR);
+	cv::imshow("GT", img_GT);
+	cv::waitKey(0);
+
+
+	//hueInvertの実行、表示
 	hueInvert(image);
 	cv::imshow("converted", image);
-	cv::waitKey(0);
-	//cv::imshow("Ground truth", image_ground_truth);
 	cv::waitKey(0);
 
 	system("pause");
