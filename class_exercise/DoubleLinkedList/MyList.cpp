@@ -1,10 +1,10 @@
 #include"MyList.h"
 #include<iostream>
 
-Node::Node() : m_value(0) {}
-Node::Node(double v) : m_value(v) {}
+MyList::Node::Node() : m_value(0) {}
+MyList::Node::Node(double v) : m_value(v) {}
 
-void Node::link_to_next_node(Node *node, Node *next_node) {
+void MyList::Node::link_to_next_node(Node *node, Node *next_node) {
 	node->m_next_node_ptr = next_node;
 	next_node->m_prev_node_ptr = node;
 };
@@ -34,14 +34,6 @@ void MyList::getSize() {
 	std::cout << "List size: " << m_size << "\n";
 }
 
-void MyList::addSize() {
-	m_size++;
-}
-
-void MyList::reduceSize() {
-	m_size--;
-}
-
 void MyList::display() {
 	std::cout << "[";
 	Node *ptr = m_dummy->m_next_node_ptr;
@@ -65,7 +57,7 @@ void MyList::pushBackNode(double value) {
 	Node::link_to_next_node(m_dummy->m_prev_node_ptr, back_node);
 	Node::link_to_next_node(back_node, m_dummy);
 
-	MyList::addSize();
+	m_size++;
 }
 
 int MyList::replaceNode(double value, int index) {
@@ -102,7 +94,7 @@ int MyList::insertNode(double value, int index) {
 			Node::link_to_next_node(inserted_node, next_node);
 			Node::link_to_next_node(prev_node, inserted_node);
 
-			MyList::addSize();
+			m_size++;
 			return 1;
 		}
 		else if (index < 0) {
@@ -116,7 +108,7 @@ int MyList::insertNode(double value, int index) {
 			Node::link_to_next_node(inserted_node, next_node);
 			Node::link_to_next_node(prev_node, inserted_node);
 
-			MyList::addSize();
+			m_size++;
 			return 1;
 		}
 	}
@@ -135,7 +127,8 @@ void MyList::popBackNode() {
 	Node::link_to_next_node(prev_back_node, m_dummy);
 
 	delete back_node;
-	MyList::reduceSize();
+
+	m_size--;
 }
 
 int MyList::deleteNode(int index) {
@@ -154,7 +147,7 @@ int MyList::deleteNode(int index) {
 
 		delete target_node;
 
-		MyList::reduceSize();
+		m_size--;
 		return 1;
 	}
 
@@ -171,7 +164,7 @@ int MyList::deleteNode(int index) {
 
 		delete target_node;
 
-		MyList::reduceSize();
+		m_size--;
 		return 1;
 	}
 
