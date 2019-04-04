@@ -1,55 +1,25 @@
 #include <opencv2/opencv.hpp>
 #include<iostream>
+#include <algorithm>
 #define median_error (-1)
 
-void insertionSort(std::vector<uchar> &vct, int size) {
-	int i, j;
-	for (i = 1; i < size; ++i) {
-		for (j = i; j > 0; --j)
-		{
-			if (vct[j - 1] > vct[j]) {
-				int tmp = vct[j - 1];
-				vct[j - 1] = vct[j];
-				vct[j] = tmp;
-			}
-			else {
-				break;
-			}
-		}
-	}
-
-}
-
-//vectorの中央値のインデックスを返す関数
-//ラスタ順
-//index配列を用意し、valuesとindexをpairにしてソート
-//int indexOfMedian(std::vector<uchar> vec) {
-//	std::vector<uchar> sorted_vec = vec;
-//
-//	insertionSort(sorted_vec, sorted_vec.size());
-//	uchar median = sorted_vec[(sorted_vec.size() - 1) / 2];
-//
-//	std::vector<uchar>::iterator itr_median = std::find(vec.begin(), vec.end(), median);
-//	size_t median_index = std::distance(vec.begin(), itr_median);
-//
-//	return (int)median_index;
-//}
-
-
+//入力したvectorの中央値のインデックスを返す関数
+//入力vectorの各valueとindexをpairにした新しいvectorをつくり、ソート
 int indexOfMedian(std::vector<uchar> vec) {
 	int vec_size = vec.size();
 	std::vector <std::pair<double, int>> value_index_pairs(vec_size);
-	for (int i; i < vec_size; ++i) {
+	for (int i=0; i < vec_size; ++i) {
 		value_index_pairs[i]= std::make_pair(vec[i],i);
 	}
 
-	insertionSort(sorted_vec, sorted_vec.size());
-	uchar median = sorted_vec[(sorted_vec.size() - 1) / 2];
+	//memo:
+	//pair同士の比較はfirstの大小、secondの大小の順で行われる
+	//よって、sortすると原則valueの昇順で並び、valueが同じ場合indexの昇順となる
 
-	std::vector<uchar>::iterator itr_median = std::find(vec.begin(), vec.end(), median);
-	size_t median_index = std::distance(vec.begin(), itr_median);
-
-	return (int)median_index;
+	std::sort(value_index_pairs.begin(),value_index_pairs.end());
+	
+	//valueの順で並んだ中から、真ん中の要素のsecond(ソート前のindex)を返す
+	return value_index_pairs[vec_size/2].second;
 }
 
 cv::Mat grayConvertedFromBGR(cv::Mat &BGR_img) {

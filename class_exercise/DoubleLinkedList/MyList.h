@@ -5,6 +5,7 @@ class MyList
 public:
 	MyList();
 	~MyList();
+
 	void getSize();
 	void display();
 	void pushBackNode(double value);

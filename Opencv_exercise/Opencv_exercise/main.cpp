@@ -1,4 +1,5 @@
 #include <opencv2/opencv.hpp>
+#include<vector>
 #include <iostream>
 
 uchar convertToUchar(double value) {
@@ -53,7 +54,7 @@ std::vector<double> BGRConvertedFromHSV(double H, double S, double V) {
 		p = V * (1 - S);
 		q = V * (1 - f * S);
 		t = V * (1 - (1 - f)*S);
-		
+
 		if (Hi == 0) {
 			B = p;
 			G = t;
@@ -89,7 +90,7 @@ std::vector<double> BGRConvertedFromHSV(double H, double S, double V) {
 		}
 
 	}
-	std::vector<double> BGR = {255.0*B,255.0*G,255.0*R};
+	std::vector<double> BGR = { 255.0*B,255.0*G,255.0*R };
 	return BGR;
 }
 
@@ -192,6 +193,53 @@ std::vector<double> HSVConvertedFromBGR(double B, double G, double R) {
 //	}
 //	std::vector<double> BGR = { 255 * B,255 * G,255 * R };
 //	return BGR;
+//}
+
+
+void insertionSort(std::vector<uchar> &vct, int size) {
+	int i, j;
+	for (i = 1; i < size; ++i) {
+		for (j = i; j > 0; --j)
+		{
+			if (vct[j - 1] > vct[j]) {
+				int tmp = vct[j - 1];
+				vct[j - 1] = vct[j];
+				vct[j] = tmp;
+			}
+			else {
+				break;
+			}
+		}
+	}
+
+}
+int indexOfMedian(std::vector<uchar> vec) {
+	int vec_size = vec.size();
+	std::vector <std::pair<double, int>> value_index_pairs(vec_size);
+	for (int i=0; i < vec_size; ++i) {
+		value_index_pairs[i] = std::make_pair(vec[i], i);
+	}
+
+	//memo:
+	//pair同士の比較はfirstの大小、secondの大小の順で行われる
+	//よって、sortすると原則valueの昇順で並び、valueが同じ場合indexの昇順となる
+
+	std::sort(value_index_pairs.begin(), value_index_pairs.end());
+
+	//valueの順で並んだ中から、真ん中の要素のsecond(ソート前のindex)を返す
+	return value_index_pairs[vec_size / 2].second;
+}
+//
+//int indexOfMedian(std::vector<uchar> vec) {
+//	std::vector<uchar> sorted_vec = vec;
+//
+//	insertionSort(sorted_vec, sorted_vec.size());
+//	uchar median = sorted_vec[(sorted_vec.size() - 1) / 2];
+//
+//	std::vector<uchar>::iterator itr_median = std::find(vec.begin(), vec.end(), median);
+//	size_t median_index = std::distance(vec.begin(), itr_median);
+//
+//	return (int)median_index;
 //}
 
 int main()
@@ -309,6 +357,11 @@ int main()
 
 	std::vector<double> re_BGR = BGRConvertedFromHSV(HSV[0],HSV[1],HSV[2]);
 	for (int i = 0; i < re_BGR.size(); ++i) { std::cout << re_BGR[i] << "\n"; }*/
+
+
+
+	std::vector<uchar> vec = { 3,5,4,1,7,6,2 };
+	std::cout << indexOfMedian(vec) << "\n";
 
 	system("pause");
 	return 0;
