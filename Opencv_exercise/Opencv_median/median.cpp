@@ -21,8 +21,27 @@ void insertionSort(std::vector<uchar> &vct, int size) {
 }
 
 //vectorの中央値のインデックスを返す関数
+//ラスタ順
+//index配列を用意し、valuesとindexをpairにしてソート
+//int indexOfMedian(std::vector<uchar> vec) {
+//	std::vector<uchar> sorted_vec = vec;
+//
+//	insertionSort(sorted_vec, sorted_vec.size());
+//	uchar median = sorted_vec[(sorted_vec.size() - 1) / 2];
+//
+//	std::vector<uchar>::iterator itr_median = std::find(vec.begin(), vec.end(), median);
+//	size_t median_index = std::distance(vec.begin(), itr_median);
+//
+//	return (int)median_index;
+//}
+
+
 int indexOfMedian(std::vector<uchar> vec) {
-	std::vector<uchar> sorted_vec = vec;
+	int vec_size = vec.size();
+	std::vector <std::pair<double, int>> value_index_pairs(vec_size);
+	for (int i; i < vec_size; ++i) {
+		value_index_pairs[i]= std::make_pair(vec[i],i);
+	}
 
 	insertionSort(sorted_vec, sorted_vec.size());
 	uchar median = sorted_vec[(sorted_vec.size() - 1) / 2];
