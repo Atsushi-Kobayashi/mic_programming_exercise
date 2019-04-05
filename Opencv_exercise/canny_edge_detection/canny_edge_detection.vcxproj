@@ -128,7 +128,9 @@
   <ItemGroup>
     <ClCompile Include="canny_edge_detection.cpp" />
     <ClCompile Include="gaussian.cpp" />
+    <ClCompile Include="hysteresis_threshold.cpp" />
     <ClCompile Include="main.cpp" />
+    <ClCompile Include="non_maximum_suppression.cpp" />
     <ClCompile Include="sobel.cpp" />
   </ItemGroup>
   <ItemGroup>

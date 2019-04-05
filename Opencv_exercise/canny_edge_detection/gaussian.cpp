@@ -80,20 +80,22 @@ void linearFilter(cv::Mat &img, std::vector<double> kernel, int kernel_size) {
 }
 
 int gaussianFilter(cv::Mat &img) {
-	int kernel_size;
+	int kernel_size=3;
+	double var = 3;
+/*
 	std::cout << "Input kernel size(odd): \n";
 	std::cin >> kernel_size;
 	if (kernel_size % 2 == 0 || kernel_size <= 0) {
 		std::cout << "Size error.\n";
 		return gaussian_error;
 	}
-	double var = 1;
+
 	std::cout << "Input variance: " << "\n";
 	std::cin >> var;
 	if (var <= 0) {
 		std::cout << "Variance error.\n";
 		return gaussian_error;
-	}
+	}*/
 
 	std::vector<double> kernel = gaussianKernel(kernel_size, var);
 	linearFilter(img, kernel, kernel_size);
