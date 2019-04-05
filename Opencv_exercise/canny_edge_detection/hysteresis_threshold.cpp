@@ -29,7 +29,6 @@ void hysteresisThreshold(cv::Mat &img_edge,uchar high_threshold, uchar low_thres
 
 	while (!strong_edge_index.empty()) {
 
-		//memo: vec[-1]‚Á‚Ä‘‚«•û³‚µ‚¢H
 		int row_index_j = strong_edge_index[strong_edge_index.size()-1] / img_cols;
 		int col_index_i = strong_edge_index[strong_edge_index.size()-1] % img_cols;
 
@@ -45,22 +44,23 @@ void hysteresisThreshold(cv::Mat &img_edge,uchar high_threshold, uchar low_thres
 					continue;
 				}
 
-				if (img_row_ptr[col_index_i + l] == 200) {
+				if (img_row_ptr[col_index_i + l] == 100) {
 					img_row_ptr[col_index_i + l] = 255;
+					//std::cout<< col_index_i + l << ", " << row_index_j + k << "\n";
 					strong_edge_index.emplace_back(col_index_i + l+(row_index_j + k)*img_cols);
 				}
 			}
 		}
 
 	}
-/*
+
 	for (int j = 0; j < img_rows; ++j) {
 		uchar *img_row_ptr = img_edge.ptr<uchar>(j);
 		for (int i = 0; i < img_cols; ++i) {
-			if (img_row_ptr[i]<=200) {
+			if (img_row_ptr[i]==100) {
 				img_row_ptr[i] = 0;
 			}
 		}
 
-	}*/
+	}
 }

@@ -43,16 +43,40 @@ void linearFilter(cv::Mat &img, std::vector<double> kernel, int kernel_size) {
 	int img_rows = img.rows;
 	int img_cols = img.cols;
 	int kernel_h = (kernel_size - 1) / 2;
-	cv::Mat img_zero_pdd = cv::Mat::zeros(img_cols + (2 * kernel_h), img_rows + (2 * kernel_h), CV_8UC3);
+	/*cv::Mat img_zero_pdd = cv::Mat::zeros(img_cols + (2 * kernel_h), img_rows + (2 * kernel_h), CV_8UC3);
 
 	for (int j = 0; j < img_rows; ++j) {
 		cv::Vec3b *row_ptr = img_zero_pdd.ptr<cv::Vec3b>(j + kernel_h);
 		for (int i = 0; i < img_cols; ++i) {
 			row_ptr[i + kernel_h] = cv::Vec3b(img.at<cv::Vec3b>(j, i)[0], img.at<cv::Vec3b>(j, i)[1], img.at<cv::Vec3b>(j, i)[2]);
 		}
-	}
-	//zero padding (Matの要素にポインタでアクセスする方法)
+	}*/
 
+	//mirroring でパディング
+	cv::Mat img_mirror_pdd = cv::Mat::zeros(img_cols + (2 *kernel_h), img_rows + (2 * kernel_h), CV_8UC3);
+	for (int j = -kernel_h; j < img_rows + kernel_h; ++j) {
+		cv::Vec3b *pdd_row_ptr = img_mirror_pdd.ptr<cv::Vec3b>(j + kernel_h);
+		int k = j;
+		if (j < 0) {
+			k = -j - 1;
+		}
+		else if (j >= img_rows) {
+			k = 2 * img_rows - 1 - j;
+		}
+		cv::Vec3b *img_row_ptr = img.ptr<cv::Vec3b>(k);
+		for (int i = -kernel_h; i < img_cols + kernel_h; ++i) {
+			int l = i;
+			if (i < 0) {
+				l = -i - 1;
+			}
+			else if (i >= img_cols) {
+				l = 2 * img_cols - 1 - i;
+			}
+
+			pdd_row_ptr[i + kernel_h] = cv::Vec3b(img_row_ptr[l][0], img_row_ptr[l][1], img_row_ptr[l][2]);
+		}
+	}
+	//cv::imshow("", img_mirror_pdd);
 	for (int j = 0; j < img_rows; ++j) {
 		cv::Vec3b *img_row_ptr = img.ptr<cv::Vec3b>(j);
 		//img（加工する画像）のMatのj行目のポインタ取得
@@ -60,8 +84,8 @@ void linearFilter(cv::Mat &img, std::vector<double> kernel, int kernel_size) {
 		for (int i = 0; i < img_cols; ++i) {
 			double B = 0, G = 0, R = 0;
 			for (int l = 0; l < kernel_size; ++l) {
-				cv::Vec3b *pdd_row_ptr = img_zero_pdd.ptr<cv::Vec3b>(j + l);
-				//pdd（ゼロパディング済み画像，書き換えない）のMatのj行目のポインタ取得
+				cv::Vec3b *pdd_row_ptr = img_mirror_pdd.ptr<cv::Vec3b>(j + l);
+				//pdd（パディング済み画像，書き換えない）のMatのj行目のポインタ取得
 				for (int k = 0; k < kernel_size; ++k) {
 
 					B += (double)pdd_row_ptr[i + k][0] * kernel[k + kernel_size * l];
@@ -81,7 +105,7 @@ void linearFilter(cv::Mat &img, std::vector<double> kernel, int kernel_size) {
 
 int gaussianFilter(cv::Mat &img) {
 	int kernel_size=3;
-	double var = 3;
+	double var = 1.3;
 /*
 	std::cout << "Input kernel size(odd): \n";
 	std::cin >> kernel_size;

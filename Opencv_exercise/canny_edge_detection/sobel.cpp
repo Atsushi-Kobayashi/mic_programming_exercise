@@ -72,15 +72,19 @@ std::vector<double> sobelConvolutionValues(cv::Mat &gray_img, std::vector<double
 
 		for (int i = 0; i < img_cols; ++i) {
 			double conv_sum = 0;
+			if (i == 0 || i == img_cols-1 || j == 0 || j == img_rows-1) {
+				img_tmp[i + j * img_cols] = 0;
+				continue;
+			}
 			for (int k = -kernel_h; k < kernel_h + 1; ++k) {
-				if (j + k < 0 || j + k >= img_rows) {
+				/*if (j + k < 0 || j + k >= img_rows) {
 					continue;
-				}
+				}*/
 				uchar *img_row_ptr = gray_img.ptr<uchar>(j + k);
 				for (int l = -kernel_h; l < kernel_h + 1; ++l) {
-					if (i + l < 0 || i + l >= img_cols) {
+					/*if (i + l < 0 || i + l >= img_cols) {
 						continue;
-					}
+					}*/
 					conv_sum += (double)img_row_ptr[i + l] * kernel[(kernel_h + l) + (kernel_h + k)*kernel_size];
 					//std::cout << (double)img_row_ptr[i + l] * kernel[(kernel_h + l) + (kernel_h + k)*kernel_size] << " :conv value ("<<l+1<<","<<k+1<<")\n";
 				}
@@ -102,7 +106,6 @@ std::vector<double> sobelConvolutionValues(cv::Mat &gray_img, std::vector<double
 
 			//img‚Ì‰æ‘f(i,j)‚ÌŒvŽZŒ‹‰Ê‚ªimg_dst[i+j*img_cols]‚ÉŠi”[‚³‚ê‚é
 			img_tmp[i + j * img_cols] = conv_sum;
-
 
 		}
 	}

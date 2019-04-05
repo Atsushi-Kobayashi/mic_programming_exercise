@@ -5,8 +5,8 @@
 #include<cmath>
 
 void cannyEdgeDetection(cv::Mat &img) {
-	int high_threshold=150;
-	int low_threshold=100;
+	int high_threshold=90;
+	int low_threshold=15;
 
 	/*std::cout << "Gaussian filter\n";*/
 	gaussianFilter(img);
