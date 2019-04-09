@@ -19,6 +19,8 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Opencv_hue_invert", "Opencv
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "canny_edge_detection", "canny_edge_detection\canny_edge_detection.vcxproj", "{3136E542-96B6-49B9-A17E-0E3FE21F3B0F}"
 EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "template_matching", "template_matching\template_matching.vcxproj", "{55549663-8ED2-437B-AB0E-0950C7F1B1E7}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|x64 = Debug|x64
@@ -91,6 +93,14 @@ Global
 		{3136E542-96B6-49B9-A17E-0E3FE21F3B0F}.Release|x64.Build.0 = Release|x64
 		{3136E542-96B6-49B9-A17E-0E3FE21F3B0F}.Release|x86.ActiveCfg = Release|Win32
 		{3136E542-96B6-49B9-A17E-0E3FE21F3B0F}.Release|x86.Build.0 = Release|Win32
+		{55549663-8ED2-437B-AB0E-0950C7F1B1E7}.Debug|x64.ActiveCfg = Debug|x64
+		{55549663-8ED2-437B-AB0E-0950C7F1B1E7}.Debug|x64.Build.0 = Debug|x64
+		{55549663-8ED2-437B-AB0E-0950C7F1B1E7}.Debug|x86.ActiveCfg = Debug|Win32
+		{55549663-8ED2-437B-AB0E-0950C7F1B1E7}.Debug|x86.Build.0 = Debug|Win32
+		{55549663-8ED2-437B-AB0E-0950C7F1B1E7}.Release|x64.ActiveCfg = Release|x64
+		{55549663-8ED2-437B-AB0E-0950C7F1B1E7}.Release|x64.Build.0 = Release|x64
+		{55549663-8ED2-437B-AB0E-0950C7F1B1E7}.Release|x86.ActiveCfg = Release|Win32
+		{55549663-8ED2-437B-AB0E-0950C7F1B1E7}.Release|x86.Build.0 = Release|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
