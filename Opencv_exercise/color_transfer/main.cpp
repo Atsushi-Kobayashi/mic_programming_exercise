@@ -110,7 +110,7 @@ void colorTransfer(cv::Mat &img_trg, cv::Mat &img_src) {
 	const int trg_cols = img_trg.cols;
 	const int src_rows = img_src.rows;
 	const int src_cols = img_src.cols;
-
+	float A = 0;
 
 	std::vector<MyVec3d> trg_lab(trg_rows*trg_cols);
 	std::vector<MyVec3d> src_lab(src_rows*src_cols);
@@ -129,7 +129,7 @@ void colorTransfer(cv::Mat &img_trg, cv::Mat &img_src) {
 
 			//constructer の使い方これでよい？
 			//RGBの順で入力
-			MyVec3d pixel_color_3d = MyVec3d((double)trg_row_ptr[i][2], (double)trg_row_ptr[i][1], (double)trg_row_ptr[i][0]);
+			MyVec3d pixel_color_3d = MyVec3d((double)trg_row_ptr[i][2] / 255, (double)trg_row_ptr[i][1] / 255, (double)trg_row_ptr[i][0] / 255);
 			//RGB to LMS 
 			pixel_color_3d.matProduct(matRGB2LMS);
 			////LMS のlogをとる
@@ -142,12 +142,17 @@ void colorTransfer(cv::Mat &img_trg, cv::Mat &img_src) {
 			//代入できてる？
 			trg_lab[i + j * trg_cols] = pixel_color_3d;
 			//avrに値を加える
-			trg_lab_avr = trg_lab_avr + trg_lab[i + j * trg_cols];
+			pixel_color_3d.scalarMultiple((double)1 / (trg_rows * trg_cols));
 
+			//operater が悪い可能性あり
+			trg_lab_avr = trg_lab_avr + pixel_color_3d;
+			A = A + pixel_color_3d.x;
 		}
 	}
+
+	std::cout << A << "\n";
 	//avrを要素数で割る,scalarMultipleの引数のキャスト注意
-	trg_lab_avr.scalarMultiple((double)1 / (trg_rows * trg_cols));
+	//trg_lab_avr.scalarMultiple((double)1 / (trg_rows * trg_cols));
 
 
 	//src をRGBからlabにしてsrc_labに格納
@@ -157,7 +162,7 @@ void colorTransfer(cv::Mat &img_trg, cv::Mat &img_src) {
 
 			//constructer の使い方これでよい？
 			//RGBの順で入力
-			MyVec3d pixel_color_3d = MyVec3d((double)src_row_ptr[i][2], (double)src_row_ptr[i][1], (double)src_row_ptr[i][0]);
+			MyVec3d pixel_color_3d = MyVec3d((double)src_row_ptr[i][2] / 255, (double)src_row_ptr[i][1] / 255, (double)src_row_ptr[i][0] / 255);
 			//RGB to LMS 
 			pixel_color_3d.matProduct(matRGB2LMS);
 			//LMS のlogをとる
@@ -212,9 +217,9 @@ void colorTransfer(cv::Mat &img_trg, cv::Mat &img_src) {
 			//LMS to RGB
 			pixel_color_3d.matProduct(matLMS2RGB);
 			//trg のMatにRGBを代入
-			trg_row_ptr[i][2] = convertToUchar(pixel_color_3d.x);
-			trg_row_ptr[i][1] = convertToUchar(pixel_color_3d.y);
-			trg_row_ptr[i][0] = convertToUchar(pixel_color_3d.z);
+			trg_row_ptr[i][2] = convertToUchar(255 * pixel_color_3d.x);
+			trg_row_ptr[i][1] = convertToUchar(255 * pixel_color_3d.y);
+			trg_row_ptr[i][0] = convertToUchar(255 * pixel_color_3d.z);
 		}
 	}
 
