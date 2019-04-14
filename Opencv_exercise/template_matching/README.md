@@ -5,6 +5,13 @@
 
 ## 結果の例
 * 例1
-入力(全体画像): [Lenna.bmp](https://raw.githubusercontent.com/Atsushi-Kobayashi/mic_programming_exercise/master/images/other/Lenna.bmp "Lenna")
-入力(テンプレート):(https://raw.githubusercontent.com/Atsushi-Kobayashi/mic_programming_exercise/master/images/other/Lenna_tml_1.bmp "Lenna_tml_1")
+入力(全体画像): ![Lenna.bmp](https://raw.githubusercontent.com/Atsushi-Kobayashi/mic_programming_exercise/master/images/other/Lenna.bmp "Lenna")
+<br>
+入力(テンプレート):![](https://raw.githubusercontent.com/Atsushi-Kobayashi/mic_programming_exercise/master/images/other/Lenna_tml_1.bmp "Lenna_tml_1")
+<br>
 出力: [Lenna_template_matching_result_1.png]( "Lenna_template_matching_result_1")
+<br>
+
+|入力・全体画像 (../../../images/other/Lenna.bmp)|入力・テンプレート (../../../images/other/Lenna_tml_1.bmp)|出力 (../../../images/results/Lenna_template_matching_1.png)|
+|:---:|:---:|:---:|
+|![](../../../images/other/Lenna.bmp)|![](../../../images/other/Lenna_tml_1.bmp)|![](../../../images/results/Lenna_template_matching_1.png)|
