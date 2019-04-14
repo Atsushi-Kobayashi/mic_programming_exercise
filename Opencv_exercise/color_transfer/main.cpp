@@ -192,6 +192,8 @@ int main(int argc, char *argv[])
 	cv::imshow("result", img_src);
 	cv::waitKey(0);
 
+	//cv::imwrite("mountain_color_transfer_1.png",img_src);
+
 	system("pause");
 	return 1;
 }

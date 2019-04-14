@@ -115,6 +115,8 @@ int main(int argc, char *argv[])
 	cv::imshow("result", img);
 	cv::waitKey(0);
 
+	//cv::imwrite("Lenna_template_matchimg_1.png",img);
+
 	system("pause");
 	return 0;
 }
