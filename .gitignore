@@ -342,3 +342,8 @@ healthchecksdb
 
 # Backup folder for Package Reference Convert tool in Visual Studio 2017
 MigrationBackup/
+
+# directories for Cmake build
+build/
+# directories for CLion debug
+cmake-build-debug/
