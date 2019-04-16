@@ -347,5 +347,6 @@ MigrationBackup/
 build/
 # directories for CLion debug
 cmake-build-debug/
-# .idea directories
+# その他mac用
 .idea/
+.DS_Store
